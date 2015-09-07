@@ -48,6 +48,8 @@ allowed_warnings = set([
     "jhash.h:137",
     "cmpxchg.h:162",
     "ping.c:87",
+    "services.c:1968",
+    "msm_sensor_driver.c:973",
  ])
 
 # Capture the name of the object file, can find it.
