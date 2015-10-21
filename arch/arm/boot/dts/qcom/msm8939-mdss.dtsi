@@ -23,6 +23,7 @@
 		qcom,msm-bus,name = "mdss_mdp";
 		qcom,msm-bus,num-cases = <3>;
 		qcom,msm-bus,num-paths = <2>;
+		qcom,mdss-num-nrt-paths = <1>;
 		qcom,msm-bus,vectors-KBps =
 			<22 512 0 0>, <23 512 0 0>,
 			<22 512 0 6400000>, <23 512 0 6400000>,
@@ -35,6 +36,7 @@
 		qcom,mdss-clk-factor = <105 100>;	/* 1.05 times */
 		qcom,max-bandwidth-low-kbps = <2000000>;
 		qcom,max-bandwidth-high-kbps = <2000000>;
+		qcom,max-bandwidth-per-pipe-kbps = <1500000>;
 
 		/* VBIF QoS remapper settings*/
 		qcom,mdss-vbif-qos-rt-setting = <2 2 2 2>;
@@ -80,6 +82,7 @@
 		qcom,mdss-has-fixed-qos-arbiter-enabled;
 		qcom,mdss-has-dst-split;
 		qcom,mdss-no-hist-vote;
+		qcom,mdss-ad-off = <0x0079000>;
 
 		vdd-cx-supply = <&pm8916_s2_corner>;
 		clocks = <&clock_gcc clk_gcc_mdss_ahb_clk>,
@@ -109,8 +112,9 @@
 		mdss_fb0: qcom,mdss_fb_primary {
 			cell-index = <0>;
 			compatible = "qcom,mdss-fb";
-			qcom,memblock-reserve = <0x83200000 0xfa0000>;
-			/*remove qcom logo when boot linux kernel*/
+			qcom,cont-splash-memory {
+				linux,contiguous-region = <&cont_splash_mem>;
+			};
 		};
 
 		mdss_fb1: qcom,mdss_fb_wfd {
@@ -153,58 +157,55 @@
 
 		qcom,mmss-ulp-clamp-ctrl-offset = <0x20>;
 		qcom,mmss-phyreset-ctrl-offset = <0x24>;
+		qcom,timing-db-mode;
 
 		qcom,core-supply-entries {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			qcom,core-supply-entry@0 {
-				reg = <0>;
-				qcom,supply-name = "gdsc";
-				qcom,supply-min-voltage = <0>;
-				qcom,supply-max-voltage = <0>;
-				qcom,supply-enable-load = <0>;
-				qcom,supply-disable-load = <0>;
-			};
-		};
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        qcom,core-supply-entry@0 {
+                                reg = <0>;
+                                qcom,supply-name = "gdsc";
+                                qcom,supply-min-voltage = <0>;
+                                qcom,supply-max-voltage = <0>;
+                                qcom,supply-enable-load = <0>;
+                                qcom,supply-disable-load = <0>;
+                        };
+                };
 
 		qcom,ctrl-supply-entries {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			qcom,ctrl-supply-entry@0 {
-				reg = <0>;
-				qcom,supply-name = "vdda";
-				qcom,supply-min-voltage = <1200000>;
-				qcom,supply-max-voltage = <1200000>;
-				qcom,supply-enable-load = <100000>;
-				qcom,supply-disable-load = <100>;
-				qcom,supply-post-on-sleep = <20>;
-			};
-		};
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        qcom,ctrl-supply-entry@0 {
+                                reg = <0>;
+                                qcom,supply-name = "vdda";
+                                qcom,supply-min-voltage = <1200000>;
+                                qcom,supply-max-voltage = <1200000>;
+                                qcom,supply-enable-load = <100000>;
+                                qcom,supply-disable-load = <100>;
+                                qcom,supply-post-on-sleep = <20>;
+                        };
+                };
 
 		qcom,panel-supply-entries {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			qcom,panel-supply-entry@0 {
-				reg = <0>;
-				qcom,supply-name = "vdd";
-				qcom,supply-min-voltage = <2850000>;
-				qcom,supply-max-voltage = <2850000>;
-				qcom,supply-enable-load = <100000>;
-				qcom,supply-disable-load = <100>;
-			};
-
-			qcom,panel-supply-entry@1 {
-				reg = <1>;
-				qcom,supply-name = "vddio";
-				qcom,supply-min-voltage = <1800000>;
-				qcom,supply-max-voltage = <1800000>;
-				qcom,supply-enable-load = <100000>;
-				qcom,supply-disable-load = <100>;
-			};
-		};
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        qcom,panel-supply-entry@0 {
+                                reg = <0>;
+                                qcom,supply-name = "vdd";
+                                qcom,supply-min-voltage = <2850000>;
+                                qcom,supply-max-voltage = <2850000>;
+                                qcom,supply-enable-load = <100000>;
+                                qcom,supply-disable-load = <100>;
+                        };
+                        qcom,panel-supply-entry@1 {
+                                reg = <1>;
+                                qcom,supply-name = "vddio";
+                                qcom,supply-min-voltage = <1800000>;
+                                qcom,supply-max-voltage = <1800000>;
+                                qcom,supply-enable-load = <100000>;
+                                qcom,supply-disable-load = <100>;
+                        };
+                };
 	};
 
 	mdss_dsi1: qcom,mdss_dsi@1aa0000 {
@@ -241,6 +242,7 @@
 
 		qcom,mmss-ulp-clamp-ctrl-offset = <0x20>;
 		qcom,mmss-phyreset-ctrl-offset = <0x24>;
+		qcom,timing-db-mode;
 
 		qcom,core-supply-entries {
 			#address-cells = <1>;
@@ -300,5 +302,5 @@
 };
 
 #include "dsi-panel-sim-video.dtsi"
-/* add default lcd dtsi to G760S*/
+#include "dsi-panel-sim-cmd.dtsi"
 #include "hw-default-lcd.dtsi"

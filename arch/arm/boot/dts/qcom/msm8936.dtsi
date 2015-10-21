@@ -31,11 +31,20 @@
 };
 
 &soc {
+	timer {
+		compatible = "arm,armv7-timer";
+		interrupts = <1 2 0xf008>,
+			     <1 3 0xf008>,
+			     <1 4 0xf008>,
+			     <1 1 0xf008>;
+		clock-frequency = <19200000>;
+	};
+
 	clock_cpu: qcom,cpu-clock-8936@b011050 {
 		compatible = "qcom,cpu-clock-8936";
 		reg = <0xb011050 0x8>,
 			<0xb1d1050 0x8>,
-			<0x5800c 0x8>;
+			<0x5800c 0X8>;
 		reg-names = "apcs-c1-rcg-base",
 				"apcs-cci-rcg-base",
 				"efuse";
@@ -104,12 +113,6 @@
 			<  3955 /*  259.2 MHz */ >,
 			<  5053 /*  331.2 MHz */ >,
 			<  6079 /*  398.4 MHz */ >;
-		qcom,ab-tbl =
-			<  381 >,
-			<  631 >,
-			<  989 >,
-			< 1263 >,
-			< 1519 >;
 	};
 
 	devfreq-cpufreq {

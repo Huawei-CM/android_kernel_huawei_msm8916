@@ -26,7 +26,6 @@
 			qcom,ion-heap-type = "SYSTEM_CONTIG";
 		};
 
-                /* remove the secure mem */
 
 		qcom,ion-heap@27 { /* QSEECOM HEAP */
 			compatible = "qcom,msm-ion-reserve";
